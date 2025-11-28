@@ -17,7 +17,6 @@ namespace TradingCompany.DALEF.Entity
         [Column("price")]
         public decimal Price { get; set; }
 
-        // Явно додаємо зовнішній ключ для зв'язку
         [Column("category_id")]
         public int CategoryId { get; set; }
 

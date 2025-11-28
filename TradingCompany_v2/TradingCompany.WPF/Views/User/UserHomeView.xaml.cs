@@ -18,11 +18,16 @@ namespace TradingCompany.WPF.Views
     /// <summary>
     /// Interaction logic for HomeView.xaml
     /// </summary>
-    public partial class HomeView : UserControl
+    public partial class UserHomeView : UserControl
     {
-        public HomeView()
+        public UserHomeView()
         {
             InitializeComponent();
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

@@ -92,5 +92,19 @@ namespace TradingCompany.DALEF.Concrete.User
                 return hashedPassword.SequenceEqual(userEntity.Password);
             }
         }
+
+        public UserDTO GetUserByEmail(string email)
+        {
+            using (var context = new TradingCompanyContext(_connectionString))
+            {
+                var userEntity = context.Users.FirstOrDefault(u => u.Email == email);
+                if (userEntity == null)
+                {
+                    return null;
+                }
+                var userDto = _mapper.Map<UserDTO>(userEntity);
+                return userDto;
+            }
+        }
     }
 }

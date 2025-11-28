@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace TradingCompany.WPF.ViewModels
     public class MainViewModel : ViewModelBase
     {
         private ViewModelBase _currentView;
-        private readonly Services.Interfases.IAuthentication _authService;
+        private readonly IServiceProvider _serviceProvider;
 
         public ViewModelBase CurrentView
         {
@@ -19,17 +20,36 @@ namespace TradingCompany.WPF.ViewModels
             set { _currentView = value; OnPropertyChanged(); }
         }
 
-        public MainViewModel(Services.Interfases.IAuthentication authentication)
+        public MainViewModel(IServiceProvider serviceProvider)
         {
-            _authService = authentication;
+            _serviceProvider = serviceProvider;
             ShowLogin();
         }
 
         private void ShowLogin()
         {
-            var loginVm = new LoginViewModel(_authService);
-            loginVm.LoginSuccess += () => CurrentView = new HomeViewModel(); // Перехід на Home при успіху
+            var loginVm = _serviceProvider.GetRequiredService<LoginViewModel>();
+
+            loginVm.LoginSuccess += () => ShowUserHome();
+
+            loginVm.Registration += () => ShowRegistration();
+
             CurrentView = loginVm;
+        }
+
+        private void ShowRegistration()
+        {
+            var registrationVm = _serviceProvider.GetRequiredService<RegistrationViewModel>();
+            registrationVm.Cancel += () => ShowLogin();
+            registrationVm.RegisterSuccess += () => ShowUserHome();
+            CurrentView = registrationVm;
+        }
+
+        private void ShowUserHome()
+        {
+            var homeVm = _serviceProvider.GetRequiredService<UserHomeViewModel>();
+            homeVm.LogoutRequested += () => ShowLogin();
+            CurrentView = homeVm;
         }
     }
 }

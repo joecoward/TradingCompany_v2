@@ -27,12 +27,15 @@ namespace TradingCompany.DALEF.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            
             modelBuilder.Entity<ActionEntity>(entity =>
             {
                 entity.HasOne(a => a.Status)
                       .WithMany(s => s.Actions)
                       .HasConstraintName("FK_Actions_Status");
             });
+
+            
             modelBuilder.Entity<ProductEntity>(entity =>
             {
                 entity.HasOne(p => p.Category)
@@ -40,39 +43,42 @@ namespace TradingCompany.DALEF.Data
                       .HasConstraintName("FK_Products_Categories");
             });
 
-            // Вказуємо, що `actionproduct_id` є первинним ключем (PK)
-            modelBuilder.Entity<ActionProductEntity>()
-                .HasKey(ap => ap.ActionProductId);
+            
+            modelBuilder.Entity<ActionProductEntity>(entity =>
+            {
+                entity.HasKey(ap => ap.ActionProductId);
 
-            // Налаштовуємо зв'язок "Один-до-багатьох":
-            // Action -> ActionProducts
-            modelBuilder.Entity<ActionProductEntity>()
-                .HasOne(ap => ap.Action)           // Кожен ActionProduct має одну Акцію
-                .WithMany(a => a.ActionProducts)  // Кожна Акція має багато ActionProducts
-                .HasForeignKey(ap => ap.ActionId); // Через ключ action_id
+                entity.HasOne(ap => ap.Action)
+                      .WithMany(a => a.ActionProducts)
+                      .HasForeignKey(ap => ap.ActionId)
+                      .HasConstraintName("FK_ActionProducts_Actions")
+                      .OnDelete(DeleteBehavior.Cascade);
 
-            // Налаштовуємо зв'язок "Один-до-багатьох":
-            // Product -> ActionProducts
-            modelBuilder.Entity<ActionProductEntity>()
-                .HasOne(ap => ap.Product)         // Кожен ActionProduct має один Продукт
-                .WithMany(p => p.ActionProducts)  // Кожен Продукт має багато ActionProducts
-                .HasForeignKey(ap => ap.ProductId); // Через ключ product_id
+                entity.HasOne(ap => ap.Product)
+                      .WithMany(p => p.ActionProducts)
+                      .HasForeignKey(ap => ap.ProductId)
+                      .HasConstraintName("FK_ActionProducts_Products")
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
 
-            modelBuilder.Entity<UserRoleEntity>()
-                .HasKey(ur => ur.UserRoleId);
+            
+            modelBuilder.Entity<UserRoleEntity>(entity =>
+            {
+                entity.HasKey(ur => ur.UserRoleId);
 
-            modelBuilder.Entity<UserRoleEntity>()
-                .HasOne(ur => ur.User)
-                .WithMany(u => u.UserRoles)
-                .HasForeignKey(ur => ur.UserId);
-
-            modelBuilder.Entity<UserRoleEntity>()
-                .HasOne(ur => ur.Role)
-                .WithMany(r => r.UserRoles)
-                .HasForeignKey(ur => ur.RoleId);
+                
+                entity.HasOne(ur => ur.User)
+                      .WithMany(u => u.UserRoles)
+                      .HasForeignKey(ur => ur.UserId)
+                      .OnDelete(DeleteBehavior.Cascade); 
+                
+                entity.HasOne(ur => ur.Role)
+                      .WithMany(r => r.UserRoles)
+                      .HasForeignKey(ur => ur.RoleId)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
 
             OnModelCreatingPartial(modelBuilder);
-
         }
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 

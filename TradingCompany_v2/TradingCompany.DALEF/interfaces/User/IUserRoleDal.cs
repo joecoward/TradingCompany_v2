@@ -9,7 +9,7 @@ namespace TradingCompany.DALEF.interfaces.User
 {
     public interface IUserRoleDal
     {
-        public UserRoleDTO Create(UserRoleDTO userRole);
+        public UserRoleDTO Create(UserDTO userDto);
         public UserRoleDTO GetById(int id);
         public List<UserRoleDTO> GetAll();
         public UserRoleDTO Update(UserRoleDTO userRole);

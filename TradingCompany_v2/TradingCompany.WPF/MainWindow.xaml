@@ -3,15 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:TradingCompany.WPF.ViewModels"
         xmlns:views="clr-namespace:TradingCompany.WPF.Views"
-        Title="Auth App" Height="450" Width="800">
+        Title="Auth App" Height="500" Width="500">
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type vm:LoginViewModel}">
             <views:LoginView/>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
-            <views:HomeView/>
+        <DataTemplate DataType="{x:Type vm:UserHomeViewModel}">
+            <views:UserHomeView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:RegistrationViewModel}">
+            <views:RegisterView/>
         </DataTemplate>
     </Window.Resources>
 

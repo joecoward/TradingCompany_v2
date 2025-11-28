@@ -73,7 +73,7 @@ namespace TradingCompany_v2
                 switch (c)
                 {
                     case '1':
-
+                        
                         break;
                     case '2':
                         ActionMenu(provider);
@@ -131,7 +131,7 @@ namespace TradingCompany_v2
                             foreach (var action in actions)
                             {
                                 Console.WriteLine("--------------------------------------------------");
-                                Console.WriteLine($" ID: {action.ActionId},\n Name: {action.Name},\n Description: {action.Description},\n StartDate: {action.StartDate},\n EndDate: {action.EndDate},\n StatusID: {action.Status.StatusId}");
+                                Console.WriteLine($" ID: {action.ActionId},\n Name: {action.Name},\n Description: {action.Description},\n StartDate: {action.StartDate},\n EndDate: {action.EndDate},\n StatusID: {action.Status.Name}");
                             }
                         }
                         break;

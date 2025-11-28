@@ -5,8 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Windows;
+using TradingCompany.DALEF.Concrete;
 using TradingCompany.DALEF.Concrete.Context;
 using TradingCompany.DALEF.Concrete.User;
+using TradingCompany.DALEF.interfaces;
 using TradingCompany.DALEF.interfaces.User;
 using TradingCompany.DALEF.MapperProfiles;
 using TradingCompany.WPF.Services.Concrete;
@@ -17,9 +19,9 @@ namespace TradingCompany.WPF
 {
     public partial class App : Application
     {
-        static IMapper _mapper;
 
         private ServiceProvider _serviceProvider;
+        
 
         public App()
         {
@@ -46,7 +48,12 @@ namespace TradingCompany.WPF
                 builder.SetMinimumLevel(LogLevel.Information);
             });
 
-            services.AddScoped<IUserDal>(provider => new UserDal(connectionString, provider.GetRequiredService<IMapper>()));
+            services.AddSingleton<IUserDal>(provider => new UserDal(connectionString, provider.GetRequiredService<IMapper>()));
+            services.AddSingleton<IUserRoleDal>(provider => new UserRoleDal(connectionString, provider.GetRequiredService<IMapper>()));
+            services.AddSingleton<IProductDal>(provider => new ProductDal(connectionString, provider.GetRequiredService<IMapper>()));
+            services.AddSingleton<IActionDal>(provider => new ActionDal(connectionString, provider.GetRequiredService<IMapper>()));
+            services.AddSingleton<ICategoryDal>(provider => new CategoryDal(connectionString, provider.GetRequiredService<IMapper>()));
+            services.AddSingleton<IStatusDal>(provider => new StatusDal(connectionString, provider.GetRequiredService<IMapper>()));
 
             services.AddSingleton(provider =>
             {
@@ -66,17 +73,18 @@ namespace TradingCompany.WPF
 
             services.AddSingleton<MainViewModel>();
             services.AddTransient<LoginViewModel>();
-            services.AddTransient<HomeViewModel>();
+            services.AddTransient<RegistrationViewModel>();
+            services.AddTransient<UserHomeViewModel>();
 
 
             services.AddSingleton<MainWindow>();
         }
 
-        // ОСЬ ЦЕЙ МЕТОД, ПРО ЯКИЙ ВИ ПИТАЛИ
         protected override void OnStartup(StartupEventArgs e)
         {
-            // Ми просимо DI дати нам готове вікно з усім необхідним
+
             var mainWindow = _serviceProvider.GetRequiredService<MainWindow>();
+            this.MainWindow = mainWindow;
             mainWindow.Show();
 
             base.OnStartup(e);

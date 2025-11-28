@@ -9,6 +9,7 @@ namespace TradingCompany.DALEF.Entity
     {
         [Key]
         public int RoleId { get; set; }
+        [Column("role_name")]
         public string? RoleName { get; set; }
         [InverseProperty("Role")]
         public ICollection<UserRoleEntity> UserRoles { get; set; } = new List<UserRoleEntity>();

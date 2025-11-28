@@ -9,5 +9,6 @@ namespace TradingCompany.WPF.Services.Interfases
     public interface IAuthentication
     {
       public bool  ValidateUser(string login, string password);
+      public bool RegisterUser(string login, string email, string password);
     }
 }
